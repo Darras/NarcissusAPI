@@ -12,17 +12,14 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 UserRoute.post('/ListUsers',Utils.verifyJWT,(req,res,next)=>{
-    UserController.ListUser(req,res,next)
+    UserController.ListUsers(req,res,next)
 })
 
 UserRoute.post('/create',Utils.verifyJWT,(req, res, next) => {
-    var token = jwt.sign({user}, process.env.SECRET, {
+    var token = jwt.sign(req.body.user, process.env.SECRET, {
       expiresIn: 300 // expires in 5min
     });
-    UserController.CreateUser(req,res,next);
-    
-    res.status(200).send('Usuario Cadastrado');
-  
+    UserController.CreateUser(token,req,res);  
   })
 
 module.exports = UserRoute;
