@@ -9,9 +9,10 @@ const http = require('http');
 const httpProxy = require('express-http-proxy');
 const userServiceProxy = httpProxy('http://localhost:3001');
 const productsServiceProxy = httpProxy('http://localhost:3002');
-
+const cors = require("cors");
 
 // parse requests of content-type - application/json
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 

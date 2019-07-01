@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userRoute = require('../routes/userRoute');
+const clientRoute = require('../routes/clientRoute');
 const app = express();
 //JWT
 const jwt = require('jsonwebtoken');
@@ -10,7 +11,7 @@ const Utils = require('../utils/Utils');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-
+router.use('/client',clientRoute);
 router.use('/user',userRoute);
 // parse requests of content-type - application/x-www-form-urlencoded
 router.get('/',Utils.verifyJWT, function (req, res, next) {

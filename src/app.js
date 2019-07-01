@@ -13,7 +13,3 @@ app.use('/api', index);
 
 
 module.exports = app;
-
-
-
-  

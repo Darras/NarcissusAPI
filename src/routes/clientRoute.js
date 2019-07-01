@@ -1,38 +1,38 @@
 const express = require('express');
-const UserRoute = express.Router();
+const ClientRoute = express.Router();
 const app = express();
 //JWT
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser')
-const UserController = require('../controllers/UserController');
+const ClientController = require('../controllers/ClientController');
 const Utils = require('../utils/Utils');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-UserRoute.post('/ListUsers',Utils.verifyJWT,(req,res,next)=>{
+ClientRoute.post('/listclients',Utils.verifyJWT,(req,res,next)=>{
   var token = jwt.sign(req.body.user, process.env.SECRET, {
     expiresIn: 300 // expires in 5min 
   });
 
-  UserController.ListUsers(token,req,res)
+  ClientController.ListClients(token,req,res)
 })
 
-UserRoute.post('/create',Utils.verifyJWT,(req, res, next) => {
+ClientRoute.post('/create',Utils.verifyJWT,(req, res, next) => {
     var token = jwt.sign(req.body.user, process.env.SECRET, {
       expiresIn: 300 // expires in 5min 
     });
-    UserController.CreateUser(token,req,res);  
+    ClientController.CreateClient(token,req,res);  
   })
 
-  UserRoute.post('/login',Utils.verifyJWT,(req, res, next) => {
+  ClientRoute.post('/login',Utils.verifyJWT,(req, res, next) => {
     var token = jwt.sign(req.body.user, process.env.SECRET, {
       expiresIn: 300 // expires in 5min 
     });
-    UserController.FindUser(req,res,token);
+    ClientController.FindClient(req,res,token);
   })
 
 
-module.exports = UserRoute;
+module.exports = ClientRoute;
 
 

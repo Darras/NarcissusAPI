@@ -2,15 +2,14 @@ const mongoose = require('mongoose');
 const userSchema = require('../models/User')
 
 var UserController = {
-    ListUsers: function(req,res,next){
+    ListUsers: function(token,req,res){
         var PUser = mongoose.model('Users', userSchema);
-        PUser.find({},function (err, users) {
-            res.json(users);
+        PUser.find({}).then((err, users) =>{
+            res.status(200).json({token,users})
         })
     },
-     CreateUser : async function(token,req,res){
+     CreateUser : function(token,req,res){
         var userModel = mongoose.model('Users', userSchema);
-        var json = '';
             // Creating one user.
             var user = new userModel ({
                 name: req.body.user.name,
@@ -24,10 +23,10 @@ var UserController = {
                 }
             });
             user.save(user).then((user) => {
-                res.status(200).json({token,user})
+                res.status(200).send({token,user})
             });
     },
-    EditUser : function(req,res,next){
+    EditUser : function(token,req,res){
         var userModel = mongoose.model('Users', userSchema);
             // Creating one user.
             var user = new userModel ({
@@ -43,17 +42,19 @@ var UserController = {
             });
 
             // Saving it to the database.
-            user.save(function (err) {if (err) console.log ('Error on save!')});
-            console.log('user editado!')
+            user.save(user).then((user) => {
+                res.status(200).json({token,user})
+            });
     },
-    FindUser : async function(token,req,res){
+    FindUser : function(req,res,token){
         var userModel = mongoose.model('Users', userSchema);
-        var result = await userModel.findOne({ 'contact.email': req.body.user.contact.email,'password': req.body.user.password })
-        .catch((ex)=>{
-                console.error('Usuário não encontrado:'+ex);
-                return ex;
-        });
-        res.status(200).json({token,result});
+        userModel.findOne({ 'contact.email': req.body.user.contact.email,'password': req.body.user.password })
+        .then((user)=>{
+            if(user == null)
+                res.status(200).send(null)
+            else
+                res.status(200).send({token,user})
+        })
     }
 }
 module.exports = UserController;
