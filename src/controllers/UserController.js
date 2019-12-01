@@ -29,22 +29,14 @@ var UserController = {
     EditUser : function(token,req,res){
         var userModel = mongoose.model('Users', userSchema);
             // Creating one user.
-            var user = new userModel ({
-                name: req.body.user.name,
-                password: req.body.user.password,
-                contact: {
-                    address: req.body.user.contact.address,
-                    zipcode: req.body.user.contact.zipcode,
-                    country: req.body.user.contact.country,
-                    email: req.body.user.contact.email,
-                    phone: req.body.user.contact.phone
-                }
-            });
-
-            // Saving it to the database.
-            user.save(user).then((user) => {
-                res.status(200).json({token,user})
-            });
+        userModel.findById(req.body.user._id,function(err, doc) {  
+                doc.name= req.body.user.name
+                doc.password= req.body.user.password
+                doc.contact = req.body.user.contact 
+                doc.save().then((user) => {
+                    res.status(200).json({token,user})
+                                })
+                })
     },
     FindUser : function(req,res,token){
         var userModel = mongoose.model('Users', userSchema);

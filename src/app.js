@@ -10,6 +10,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 //Rotas
 const index = require('./routes/index');
 app.use('/api', index);
-
+app.use('/uploads',express.static('uploads'))
 
 module.exports = app;

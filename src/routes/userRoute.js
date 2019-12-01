@@ -25,6 +25,13 @@ UserRoute.post('/create',Utils.verifyJWT,(req, res, next) => {
     UserController.CreateUser(token,req,res);  
   })
 
+  UserRoute.post('/edit',Utils.verifyJWT,(req, res, next) => {
+    var token = jwt.sign(req.body.user, process.env.SECRET, {
+      expiresIn: 300 // expires in 5min 
+    });
+    UserController.EditUser(token,req,res);  
+  })
+
   UserRoute.post('/login',Utils.verifyJWT,(req, res, next) => {
     var token = jwt.sign(req.body.user, process.env.SECRET, {
       expiresIn: 300 // expires in 5min 
